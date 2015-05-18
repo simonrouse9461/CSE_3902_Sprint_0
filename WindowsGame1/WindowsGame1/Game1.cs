@@ -22,6 +22,8 @@ namespace WindowsGame1
         private Texture2D shuttle;
         private Texture2D earth;
         private Texture2D cow;
+        private SpriteFont font;
+        private int score = 0;
 
         public Game1()
         {
@@ -56,6 +58,7 @@ namespace WindowsGame1
             shuttle = Content.Load<Texture2D>("shuttle");
             earth = Content.Load<Texture2D>("earth");
             cow = Content.Load<Texture2D>("cow");
+            font = Content.Load<SpriteFont>("score");
         }
 
         /// <summary>
@@ -79,6 +82,7 @@ namespace WindowsGame1
                 this.Exit();
 
             // TODO: Add your update logic here
+            score++;
 
             base.Update(gameTime);
         }
@@ -98,6 +102,7 @@ namespace WindowsGame1
             spriteBatch.Draw(earth, new Vector2(400, 240), Color.White);
             spriteBatch.Draw(shuttle, new Vector2(450, 240), Color.White);
             spriteBatch.Draw(cow, new Rectangle(200,100, 50, 50), Color.White);
+            spriteBatch.DrawString(font, "My Game! The score is: " + score, new Vector2(100, 200), Color.White);
 
             spriteBatch.End();
 
