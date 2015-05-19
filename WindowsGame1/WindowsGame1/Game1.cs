@@ -22,8 +22,12 @@ namespace WindowsGame1
         private Texture2D shuttle;
         private Texture2D earth;
         private Texture2D cow;
+        private Texture2D texture;
         private SpriteFont font;
+        private AnimatedSprite animatedSprite;
         private int score = 0;
+        private KeyboardState newState;
+        private KeyboardState oldState;
 
         public Game1()
         {
@@ -59,6 +63,8 @@ namespace WindowsGame1
             earth = Content.Load<Texture2D>("earth");
             cow = Content.Load<Texture2D>("cow");
             font = Content.Load<SpriteFont>("score");
+            texture = Content.Load<Texture2D>("SmileyWalk");
+            animatedSprite = new AnimatedSprite(texture, 4, 4);
         }
 
         /// <summary>
@@ -82,7 +88,15 @@ namespace WindowsGame1
                 this.Exit();
 
             // TODO: Add your update logic here
-            score++;
+            newState = Keyboard.GetState();
+            if (oldState.IsKeyUp(Keys.Left) && newState.IsKeyDown(Keys.Left))
+            {
+                // do something here
+                score++;
+            }
+            oldState = newState;
+            
+            animatedSprite.Update();
 
             base.Update(gameTime);
         }
@@ -103,6 +117,7 @@ namespace WindowsGame1
             spriteBatch.Draw(shuttle, new Vector2(450, 240), Color.White);
             spriteBatch.Draw(cow, new Rectangle(200,100, 50, 50), Color.White);
             spriteBatch.DrawString(font, "My Game! The score is: " + score, new Vector2(100, 200), Color.White);
+            animatedSprite.Draw(spriteBatch, new Vector2(400, 200));
 
             spriteBatch.End();
 

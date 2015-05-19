@@ -32,7 +32,7 @@ namespace WindowsGame1
                 currentFrame = 0;
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 location)
+        public void Draw(SpriteBatch spriteBatch, Vector2 location) 
         {
             int width = Texture.Width / Columns;
             int height = Texture.Height / Rows;
@@ -42,9 +42,9 @@ namespace WindowsGame1
             Rectangle sourceRectangle = new Rectangle(width * column, height * row, width, height);
             Rectangle destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width, height);
 
-            spriteBatch.Begin();
+            //spriteBatch.Begin();
             spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White);
-            spriteBatch.End();
+            //spriteBatch.End();
         }
     }
 }
