@@ -18,16 +18,19 @@ namespace WindowsGame1
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        private IController keyboard;
+        private IController gamepad;
         private Texture2D background;
-        private Texture2D shuttle;
-        private Texture2D earth;
-        private Texture2D cow;
+        //private Texture2D shuttle;
+        //private Texture2D earth;
+        //private Texture2D cow;
         private Texture2D texture;
-        private SpriteFont font;
-        private AnimatedSprite animatedSprite;
-        private int score = 0;
-        private KeyboardState newState;
-        private KeyboardState oldState;
+        //private SpriteFont font;
+        //private int score = 0;
+        private ISprite runningInPlaceMario;
+        private ISprite deadMarioSprite;
+        private ISprite runningMarioSprite;
+        internal int currentSprite;
 
         public Game1()
         {
@@ -44,8 +47,9 @@ namespace WindowsGame1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
-            base.Initialize();
+            keyboard = new KeyboardController();
+            gamepad = new
+            keyboard.RegisterCommand(Keys.W, new AnimateCommand(this));
         }
 
         /// <summary>
@@ -59,12 +63,12 @@ namespace WindowsGame1
 
             // TODO: use this.Content to load your game content here
             background = Content.Load<Texture2D>("stars");
-            shuttle = Content.Load<Texture2D>("shuttle");
-            earth = Content.Load<Texture2D>("earth");
-            cow = Content.Load<Texture2D>("cow");
-            font = Content.Load<SpriteFont>("score");
+            //shuttle = Content.Load<Texture2D>("shuttle");
+            //earth = Content.Load<Texture2D>("earth");
+            //cow = Content.Load<Texture2D>("cow");
+            //font = Content.Load<SpriteFont>("score");
             texture = Content.Load<Texture2D>("SmileyWalk");
-            animatedSprite = new AnimatedSprite(texture, 4, 4);
+            objSprite = new AnimatedSprite(texture, 4, 4);
         }
 
         /// <summary>
@@ -88,17 +92,7 @@ namespace WindowsGame1
                 this.Exit();
 
             // TODO: Add your update logic here
-            newState = Keyboard.GetState();
-            if (oldState.IsKeyUp(Keys.Left) && newState.IsKeyDown(Keys.Left))
-            {
-                // do something here
-                score++;
-            }
-            oldState = newState;
-            
-            animatedSprite.Update();
-
-            base.Update(gameTime);
+            keyboard.Update();
         }
 
         /// <summary>
@@ -113,11 +107,11 @@ namespace WindowsGame1
             spriteBatch.Begin();
 
             spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);
-            spriteBatch.Draw(earth, new Vector2(400, 240), Color.White);
-            spriteBatch.Draw(shuttle, new Vector2(450, 240), Color.White);
-            spriteBatch.Draw(cow, new Rectangle(200,100, 50, 50), Color.White);
-            spriteBatch.DrawString(font, "My Game! The score is: " + score, new Vector2(100, 200), Color.White);
-            animatedSprite.Draw(spriteBatch, new Vector2(400, 200));
+            //spriteBatch.Draw(earth, new Vector2(400, 240), Color.White);
+            //spriteBatch.Draw(shuttle, new Vector2(450, 240), Color.White);
+            //spriteBatch.Draw(cow, new Rectangle(200,100, 50, 50), Color.White);
+            //spriteBatch.DrawString(font, "My Game! The score is: " + score, new Vector2(100, 200), Color.White);
+            objSprite.Draw(spriteBatch, new Vector2(400, 200));
 
             spriteBatch.End();
 
