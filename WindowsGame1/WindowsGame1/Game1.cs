@@ -104,9 +104,9 @@ namespace WindowsGame1
             //font = Content.Load<SpriteFont>("score");
             texture = Content.Load<Texture2D>("mario");
 
-            runningInPlaceMarioSprite = new RunningInPlaceMarioSprite(texture, new Vector2(0, 0), new Vector2(0, 0), 1, new Vector2(0, 0));
-            deadMarioSprite = new DeadMovingUpAndDownMarioSprite(texture, new Vector2(0, 0), new Vector2(0, 0), 1, new Vector2(0, 0));
-            runningMarioSprite = new RunningLeftAndRightMarioSprite(texture, new Vector2(0, 0), new Vector2(0, 0), 1, new Vector2(0, 0));
+            runningInPlaceMarioSprite = new RunningInPlaceMarioSprite(texture, new Vector2(230, 50), new Vector2(322, 85), 3, 10);
+            deadMarioSprite = new DeadMovingUpAndDownMarioSprite(texture, new Vector2(0, 16), new Vector2(14, 29), new Vector2(0, 20), 5, 5);
+            runningMarioSprite = new RunningLeftAndRightMarioSprite(texture, new Vector2(83, 50), new Vector2(322, 85), new Vector2(60, 0), 8, 10);
         
             base.LoadContent();
         }
@@ -174,13 +174,13 @@ namespace WindowsGame1
             switch (currentSprite)
             {
                 case Sprite.runningInPlace:
-                    runningInPlaceMarioSprite.Draw(spriteBatch, new Vector2(0, 0));
+                    runningInPlaceMarioSprite.Draw(spriteBatch, new Vector2(400, 240));
                     break;
                 case Sprite.dead:
-                    deadMarioSprite.Draw(spriteBatch, new Vector2(0, 0));
+                    deadMarioSprite.Draw(spriteBatch, new Vector2(400, 240));
                     break;
                 case Sprite.running:
-                    runningMarioSprite.Draw(spriteBatch, new Vector2(0, 0));
+                    runningMarioSprite.Draw(spriteBatch, new Vector2(400, 240));
                     break;
                 default:
                     break;
