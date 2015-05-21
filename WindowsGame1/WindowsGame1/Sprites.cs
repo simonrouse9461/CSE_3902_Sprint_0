@@ -8,23 +8,25 @@ using System.Text;
 namespace WindowsGame1
 {
 
-    public class AnimatedSprite : ISprite
+    public class RunningInPlaceMarioSprite : ISprite
     {
         public Texture2D Texture { get; set; }
-        public int YStart { get; set; }
-        public int YEnd { get; set; }
         public int XStart { get; set; }
         public int XEnd { get; set; }
+        public int YStart { get; set; }
+        public int YEnd { get; set; }
         private int currentFrame;
         private int totalFrames;
-        
-        public AnimatedSprite(Texture2D texture, int rows, int columns)
+
+        public RunningInPlaceMarioSprite(Texture2D texture, int xStart, int yStart, int xEnd, int yEnd, int frames)
         {
             Texture = texture;
-            Rows = rows;
-            Columns = columns;
+            XStart = xStart;
+            XEnd = xEnd;
+            YStart = yStart;
+            YEnd = yEnd;
+            totalFrames = frames;
             currentFrame = 0;
-            totalFrames = Rows * Columns;
         }
 
         public void Update()
@@ -48,7 +50,7 @@ namespace WindowsGame1
         }
     }
 
-    public class MovedSprite : ISprite
+    public class DeadMovingUpAndDownMarioSprite : ISprite
     {
         public Texture2D Texture { get; set; }
         public int Rows { get; set; }
@@ -56,7 +58,7 @@ namespace WindowsGame1
         private int currentFrame;
         private int totalFrames;
 
-        public MovedSprite(Texture2D texture, int rows, int columns)
+        public DeadMovingUpAndDownMarioSprite(Texture2D texture, int xStart, int yStart, int xEnd, int yEnd, int frames)
         {
             Texture = texture;
             Rows = rows;
@@ -86,7 +88,7 @@ namespace WindowsGame1
         }
     }
 
-    public class AnimatedMovedSprite : ISprite
+    public class RunningLeftAndRightMarioSprite : ISprite
     {
         public Texture2D Texture { get; set; }
         public int Rows { get; set; }
@@ -94,7 +96,7 @@ namespace WindowsGame1
         private int currentFrame;
         private int totalFrames;
 
-        public AnimatedMovedSprite(Texture2D texture, int rows, int columns)
+        public RunningLeftAndRightMarioSprite(Texture2D texture, int xStart, int yStart, int xEnd, int yEnd, int frames)
         {
             Texture = texture;
             Rows = rows;

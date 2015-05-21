@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace WindowsGame1
 {
-    public class KeyboardController : IController
+    public class KeyboardController : IController<Keys>
     {
         private Dictionary<Keys, ICommand> controllerMappings;
 
@@ -28,27 +29,30 @@ namespace WindowsGame1
         }
     }
 
-    public class GamepadController : IController
+    public class GamepadController : IController<Buttons>
     {
-        private Dictionary<Keys, ICommand> controllerMappings;
+        private Dictionary<Buttons, ICommand> controllerMappings;
+        private List<Buttons> registeredButtons;
 
         public GamepadController()
         {
-            controllerMappings = new Dictionary<Keys, ICommand>();
+            controllerMappings = new Dictionary<Buttons, ICommand>();
         }
 
-        public void RegisterCommand(Keys key, ICommand command)
+        public void RegisterCommand(Buttons button, ICommand command)
         {
-            controllerMappings.Add(key, command);
+            controllerMappings.Add(button, command);
+            registeredButtons.Add(button);
         }
 
         public void Update()
         {
-            Keys[] pressedKeys = Keyboard.GetState().GetPressedKeys();
-
-            foreach (Keys key in pressedKeys)
+            foreach (Buttons button in registeredButtons)
             {
-                controllerMappings[key].Execute();
+                if (GamePad.GetState(PlayerIndex.One).IsButtonDown(button))
+                {
+                    controllerMappings[button].Execute();
+                }
             }
         }
     }

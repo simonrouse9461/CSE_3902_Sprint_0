@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -18,19 +19,35 @@ namespace WindowsGame1
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        private IController keyboard;
-        private IController gamepad;
-        private Texture2D background;
+
+        private Texture2D texture;
+
+        private IController<Keys> keyboardController;
+        private IController<Buttons> gamepadController;
+
+        public enum Sprite
+        {
+            runningInPlace,
+            dead,
+            running
+        };
+        internal Sprite currentSprite { get; set; }
+
+        private ISprite runningInPlaceMarioSprite;
+        private ISprite deadMarioSprite;
+        private ISprite runningMarioSprite;
+
+        private ICommand quitCommand;
+        private ICommand runningInPlaceCommand;
+        private ICommand deadCommand;
+        private ICommand runningCommand;
+
+        //private Texture2D background;
         //private Texture2D shuttle;
         //private Texture2D earth;
         //private Texture2D cow;
-        private Texture2D texture;
         //private SpriteFont font;
         //private int score = 0;
-        private ISprite runningInPlaceMario;
-        private ISprite deadMarioSprite;
-        private ISprite runningMarioSprite;
-        internal int currentSprite;
 
         public Game1()
         {
@@ -47,9 +64,29 @@ namespace WindowsGame1
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            keyboard = new KeyboardController();
-            gamepad = new
-            keyboard.RegisterCommand(Keys.W, new AnimateCommand(this));
+            keyboardController = new KeyboardController();
+            gamepadController = new GamepadController();
+
+            runningInPlaceMarioSprite = new RunningInPlaceMarioSprite(texture, 0, 0, 0, 0, 0);
+            deadMarioSprite = new DeadMovingUpAndDownMarioSprite(texture, 0, 0, 0, 0, 0);
+            runningMarioSprite = new RunningLeftAndRightMarioSprite(texture, 0, 0, 0, 0, 0);
+
+            currentSprite = Sprite.runningInPlace;
+
+            quitCommand = new QuitCommand(this);
+            runningInPlaceCommand = new RunningInPlaceCommand(this);
+            deadCommand = new DeadCommand(this);
+            runningCommand = new RunningCommand(this);
+
+            keyboardController.RegisterCommand(Keys.Q, quitCommand);
+            keyboardController.RegisterCommand(Keys.W, runningInPlaceCommand);
+            keyboardController.RegisterCommand(Keys.E, deadCommand);
+            keyboardController.RegisterCommand(Keys.R, runningCommand);
+
+            gamepadController.RegisterCommand(Buttons.Back, quitCommand);
+            gamepadController.RegisterCommand(Buttons.A, runningInPlaceCommand);
+            gamepadController.RegisterCommand(Buttons.B, deadCommand);
+            gamepadController.RegisterCommand(Buttons.X, runningCommand);
         }
 
         /// <summary>
@@ -62,13 +99,12 @@ namespace WindowsGame1
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            background = Content.Load<Texture2D>("stars");
+            //background = Content.Load<Texture2D>("stars");
             //shuttle = Content.Load<Texture2D>("shuttle");
             //earth = Content.Load<Texture2D>("earth");
             //cow = Content.Load<Texture2D>("cow");
             //font = Content.Load<SpriteFont>("score");
-            texture = Content.Load<Texture2D>("SmileyWalk");
-            objSprite = new AnimatedSprite(texture, 4, 4);
+            texture = Content.Load<Texture2D>("mario");
         }
 
         /// <summary>
@@ -92,7 +128,24 @@ namespace WindowsGame1
                 this.Exit();
 
             // TODO: Add your update logic here
-            keyboard.Update();
+            keyboardController.Update();
+            gamepadController.Update();
+
+            switch (currentSprite)
+            {
+                case Sprite.runningInPlace:
+                    runningInPlaceMarioSprite.Update();
+                    break;
+                case Sprite.dead:
+                    deadMarioSprite.Update();
+                    break;
+                case Sprite.running:
+                    runningMarioSprite.Update();
+                    break;
+                default:
+                    break;
+            }
+
         }
 
         /// <summary>
@@ -106,16 +159,27 @@ namespace WindowsGame1
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
-            spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);
+            //spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);
             //spriteBatch.Draw(earth, new Vector2(400, 240), Color.White);
             //spriteBatch.Draw(shuttle, new Vector2(450, 240), Color.White);
             //spriteBatch.Draw(cow, new Rectangle(200,100, 50, 50), Color.White);
             //spriteBatch.DrawString(font, "My Game! The score is: " + score, new Vector2(100, 200), Color.White);
-            objSprite.Draw(spriteBatch, new Vector2(400, 200));
+            switch (currentSprite)
+            {
+                case Sprite.runningInPlace:
+                    runningInPlaceMarioSprite.Draw();
+                    break;
+                case Sprite.dead:
+                    deadMarioSprite.Draw();
+                    break;
+                case Sprite.running:
+                    runningMarioSprite.Draw();
+                    break;
+                default:
+                    break;
+            }
 
             spriteBatch.End();
-
-            base.Draw(gameTime);
         }
     }
 }

@@ -1,47 +1,62 @@
 ﻿namespace WindowsGame1
 {
-    public class AnimateCommand : ICommand
+    public class QuitCommand : ICommand
     {
         private Game1 myGame;
 
-        public AnimateCommand(Game1 game)
+        public QuitCommand(Game1 game)
         {
             myGame = game;
         }
 
         public void Execute()
         {
-            myGame.objSprite = new AnimatedSprite();
+            myGame.Exit();
         }
     }
 
-    public class MoveCommand : ICommand
+    public class RunningInPlaceCommand : ICommand
     {
         private Game1 myGame;
 
-        public MoveCommand(Game1 game)
+        public RunningInPlaceCommand(Game1 game)
         {
             myGame = game;
         }
 
         public void Execute()
         {
-            myGame.objSprite = new MovedSprite();
+            myGame.currentSprite = Game1.Sprite.runningInPlace;
         }
     }
 
-    public class AnimateMoveCommand : ICommand
+    public class DeadCommand : ICommand
     {
         private Game1 myGame;
 
-        public AnimateMoveCommand(Game1 game)
+        public DeadCommand(Game1 game)
         {
             myGame = game;
         }
 
         public void Execute()
         {
-            myGame.objSprite = new AnimatedMovedSprite();
+            myGame.currentSprite = Game1.Sprite.dead;
+        }
+    }
+
+    public class RunningCommand : ICommand
+    {
+        private Game1 myGame;
+
+        public RunningCommand(Game1 game)
+        {
+            myGame = game;
+        }
+
+        public void Execute()
+        {
+            myGame.currentSprite = Game1.Sprite.running;
         }
     }
 }

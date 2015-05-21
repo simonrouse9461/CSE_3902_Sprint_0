@@ -2,9 +2,9 @@
 
 namespace WindowsGame1
 {
-    public interface IController
+    public interface IController<T>
     {
-        void RegisterCommand(Keys key, ICommand command);
+        void RegisterCommand(T key, ICommand command);
         void Update();
     }
 }
