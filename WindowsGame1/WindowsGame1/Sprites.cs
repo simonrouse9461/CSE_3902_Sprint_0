@@ -11,39 +11,49 @@ namespace WindowsGame1
     public class RunningInPlaceMarioSprite : ISprite
     {
         public Texture2D Texture { get; set; }
-        public int XStart { get; set; }
-        public int XEnd { get; set; }
-        public int YStart { get; set; }
-        public int YEnd { get; set; }
+        public Vector2 Start { get; set; }
+        public Vector2 End { get; set; }
+        public Vector2 Offset { get; set; }
+        private Vector2 unitOffset;
+        private Vector2 currentOffset;
+        public int TotalFrames { get; set; }
+        private int width;
+        private int height;
         private int currentFrame;
-        private int totalFrames;
 
-        public RunningInPlaceMarioSprite(Texture2D texture, int xStart, int yStart, int xEnd, int yEnd, int frames)
+        public RunningInPlaceMarioSprite(Texture2D texture, Vector2 start, Vector2 end, int frames, Vector2 offset)
         {
             Texture = texture;
-            XStart = xStart;
-            XEnd = xEnd;
-            YStart = yStart;
-            YEnd = yEnd;
-            totalFrames = frames;
+            Start = start;
+            End = end;
+            TotalFrames = frames;
+            Offset = offset;
+            unitOffset.X = offset.X/frames;
+            unitOffset.Y = offset.Y/frames;
             currentFrame = 0;
+            width = (int) (End.X - Start.X)/frames;
+            height = (int) (End.Y - Start.Y);
+            currentOffset.X = 0;
+            currentOffset.Y = 0;
         }
 
         public void Update()
         {
             currentFrame++;
-            if (currentFrame == totalFrames)
+            currentOffset += unitOffset;
+            if (currentFrame == TotalFrames)
+            {
                 currentFrame = 0;
+                currentOffset.X = 0;
+                currentOffset.Y = 0;
+            }
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 location) 
+        public void Draw(SpriteBatch spriteBatch, Vector2 location)
         {
-            int width = Texture.Width / Columns;
-            int height = Texture.Height / Rows;
-            int row = (int)((float)currentFrame / (float)Columns);
-            int column = currentFrame % Columns;
-
-            Rectangle sourceRectangle = new Rectangle(width * column, height * row, width, height);
+            location += currentOffset;
+            Rectangle sourceRectangle = new Rectangle((int) Start.X + width*currentFrame, (int) Start.Y,
+                width, height);
             Rectangle destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width, height);
 
             spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White);
@@ -53,35 +63,49 @@ namespace WindowsGame1
     public class DeadMovingUpAndDownMarioSprite : ISprite
     {
         public Texture2D Texture { get; set; }
-        public int Rows { get; set; }
-        public int Columns { get; set; }
+        public Vector2 Start { get; set; }
+        public Vector2 End { get; set; }
+        public Vector2 Offset { get; set; }
+        private Vector2 unitOffset;
+        private Vector2 currentOffset;
+        public int TotalFrames { get; set; }
+        private int width;
+        private int height;
         private int currentFrame;
-        private int totalFrames;
 
-        public DeadMovingUpAndDownMarioSprite(Texture2D texture, int xStart, int yStart, int xEnd, int yEnd, int frames)
+        public DeadMovingUpAndDownMarioSprite(Texture2D texture, Vector2 start, Vector2 end, int frames, Vector2 offset)
         {
             Texture = texture;
-            Rows = rows;
-            Columns = columns;
+            Start = start;
+            End = end;
+            TotalFrames = frames;
+            Offset = offset;
+            unitOffset.X = offset.X/frames;
+            unitOffset.Y = offset.Y/frames;
             currentFrame = 0;
-            totalFrames = Rows * Columns;
+            width = (int) (End.X - Start.X)/frames;
+            height = (int) (End.Y - Start.Y);
+            currentOffset.X = 0;
+            currentOffset.Y = 0;
         }
 
         public void Update()
         {
             currentFrame++;
-            if (currentFrame == totalFrames)
+            currentOffset += unitOffset;
+            if (currentFrame == TotalFrames)
+            {
                 currentFrame = 0;
+                currentOffset.X = 0;
+                currentOffset.Y = 0;
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch, Vector2 location)
         {
-            int width = Texture.Width / Columns;
-            int height = Texture.Height / Rows;
-            int row = (int)((float)currentFrame / (float)Columns);
-            int column = currentFrame % Columns;
-
-            Rectangle sourceRectangle = new Rectangle(width * column, height * row, width, height);
+            location += currentOffset;
+            Rectangle sourceRectangle = new Rectangle((int) Start.X + width*currentFrame, (int) Start.Y,
+                width, height);
             Rectangle destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width, height);
 
             spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White);
@@ -91,35 +115,49 @@ namespace WindowsGame1
     public class RunningLeftAndRightMarioSprite : ISprite
     {
         public Texture2D Texture { get; set; }
-        public int Rows { get; set; }
-        public int Columns { get; set; }
+        public Vector2 Start { get; set; }
+        public Vector2 End { get; set; }
+        public Vector2 Offset { get; set; }
+        private Vector2 unitOffset;
+        private Vector2 currentOffset;
+        public int TotalFrames { get; set; }
+        private int width;
+        private int height;
         private int currentFrame;
-        private int totalFrames;
 
-        public RunningLeftAndRightMarioSprite(Texture2D texture, int xStart, int yStart, int xEnd, int yEnd, int frames)
+        public RunningLeftAndRightMarioSprite(Texture2D texture, Vector2 start, Vector2 end, int frames, Vector2 offset)
         {
             Texture = texture;
-            Rows = rows;
-            Columns = columns;
+            Start = start;
+            End = end;
+            TotalFrames = frames;
+            Offset = offset;
+            unitOffset.X = offset.X/frames;
+            unitOffset.Y = offset.Y/frames;
             currentFrame = 0;
-            totalFrames = Rows * Columns;
+            width = (int) (End.X - Start.X)/frames;
+            height = (int) (End.Y - Start.Y);
+            currentOffset.X = 0;
+            currentOffset.Y = 0;
         }
 
         public void Update()
         {
             currentFrame++;
-            if (currentFrame == totalFrames)
+            currentOffset += unitOffset;
+            if (currentFrame == TotalFrames)
+            {
                 currentFrame = 0;
+                currentOffset.X = 0;
+                currentOffset.Y = 0;
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch, Vector2 location)
         {
-            int width = Texture.Width / Columns;
-            int height = Texture.Height / Rows;
-            int row = (int)((float)currentFrame / (float)Columns);
-            int column = currentFrame % Columns;
-
-            Rectangle sourceRectangle = new Rectangle(width * column, height * row, width, height);
+            location += currentOffset;
+            Rectangle sourceRectangle = new Rectangle((int) Start.X + width*currentFrame, (int) Start.Y,
+                width, height);
             Rectangle destinationRectangle = new Rectangle((int)location.X, (int)location.Y, width, height);
 
             spriteBatch.Draw(Texture, destinationRectangle, sourceRectangle, Color.White);
