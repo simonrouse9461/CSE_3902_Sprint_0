@@ -24,7 +24,8 @@ namespace WindowsGame1
 
             foreach (Keys key in pressedKeys)
             {
-                controllerMappings[key].Execute();
+                if (controllerMappings.ContainsKey(key))
+                    controllerMappings[key].Execute();
             }
         }
     }
@@ -37,6 +38,7 @@ namespace WindowsGame1
         public GamepadController()
         {
             controllerMappings = new Dictionary<Buttons, ICommand>();
+            registeredButtons = new List<Buttons>();
         }
 
         public void RegisterCommand(Buttons button, ICommand command)

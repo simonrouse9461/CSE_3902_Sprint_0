@@ -42,7 +42,7 @@ namespace WindowsGame1
         private ICommand deadCommand;
         private ICommand runningCommand;
 
-        //private Texture2D background;
+        private Texture2D background;
         //private Texture2D shuttle;
         //private Texture2D earth;
         //private Texture2D cow;
@@ -67,10 +67,6 @@ namespace WindowsGame1
             keyboardController = new KeyboardController();
             gamepadController = new GamepadController();
 
-            runningInPlaceMarioSprite = new RunningInPlaceMarioSprite(texture, 0, 0, 0, 0, 0);
-            deadMarioSprite = new DeadMovingUpAndDownMarioSprite(texture, 0, 0, 0, 0, 0);
-            runningMarioSprite = new RunningLeftAndRightMarioSprite(texture, 0, 0, 0, 0, 0);
-
             currentSprite = Sprite.runningInPlace;
 
             quitCommand = new QuitCommand(this);
@@ -87,6 +83,8 @@ namespace WindowsGame1
             gamepadController.RegisterCommand(Buttons.A, runningInPlaceCommand);
             gamepadController.RegisterCommand(Buttons.B, deadCommand);
             gamepadController.RegisterCommand(Buttons.X, runningCommand);
+
+            base.Initialize();
         }
 
         /// <summary>
@@ -99,12 +97,18 @@ namespace WindowsGame1
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            //background = Content.Load<Texture2D>("stars");
+            background = Content.Load<Texture2D>("stars");
             //shuttle = Content.Load<Texture2D>("shuttle");
             //earth = Content.Load<Texture2D>("earth");
             //cow = Content.Load<Texture2D>("cow");
             //font = Content.Load<SpriteFont>("score");
             texture = Content.Load<Texture2D>("mario");
+
+            runningInPlaceMarioSprite = new RunningInPlaceMarioSprite(texture, new Vector2(0, 0), new Vector2(0, 0), 1, new Vector2(0, 0));
+            deadMarioSprite = new DeadMovingUpAndDownMarioSprite(texture, new Vector2(0, 0), new Vector2(0, 0), 1, new Vector2(0, 0));
+            runningMarioSprite = new RunningLeftAndRightMarioSprite(texture, new Vector2(0, 0), new Vector2(0, 0), 1, new Vector2(0, 0));
+        
+            base.LoadContent();
         }
 
         /// <summary>
@@ -114,6 +118,8 @@ namespace WindowsGame1
         protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
+
+            base.UnloadContent();
         }
 
         /// <summary>
@@ -146,6 +152,7 @@ namespace WindowsGame1
                     break;
             }
 
+            base.Update(gameTime);
         }
 
         /// <summary>
@@ -159,7 +166,7 @@ namespace WindowsGame1
             // TODO: Add your drawing code here
             spriteBatch.Begin();
 
-            //spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);
+            spriteBatch.Draw(background, new Rectangle(0, 0, 800, 480), Color.White);
             //spriteBatch.Draw(earth, new Vector2(400, 240), Color.White);
             //spriteBatch.Draw(shuttle, new Vector2(450, 240), Color.White);
             //spriteBatch.Draw(cow, new Rectangle(200,100, 50, 50), Color.White);
@@ -167,19 +174,21 @@ namespace WindowsGame1
             switch (currentSprite)
             {
                 case Sprite.runningInPlace:
-                    runningInPlaceMarioSprite.Draw();
+                    runningInPlaceMarioSprite.Draw(spriteBatch, new Vector2(0, 0));
                     break;
                 case Sprite.dead:
-                    deadMarioSprite.Draw();
+                    deadMarioSprite.Draw(spriteBatch, new Vector2(0, 0));
                     break;
                 case Sprite.running:
-                    runningMarioSprite.Draw();
+                    runningMarioSprite.Draw(spriteBatch, new Vector2(0, 0));
                     break;
                 default:
                     break;
             }
 
             spriteBatch.End();
+
+            base.Draw(gameTime);
         }
     }
 }
